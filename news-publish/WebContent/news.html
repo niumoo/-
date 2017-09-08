@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="full">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>扣钉信息</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/indexstyle.css" rel="stylesheet">
+  </head>
+  
+  <body>
+
+    <!-- 首页导航 -->
+    <nav class="navbar navbar-default topMenu">
+      <div class="container">
+        <div class="row">
+        <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 ">
+        <div class="navbar-header">
+          <a class="navbar-brand" style="color:white;" href="index.html">扣钉信息</a>
+        </div>
+        <div id="navbar">
+          <ul class="nav navbar-nav" id="categoryMenu">
+          
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a style="color:white;" href="#">登陆</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+        <!-- 使用绝对定位和相对定位和层数设定来让搜索提示悬浮在最上层 -->
+        <div class="text-center" style="position: relative;">
+            <input id="searchInput" type="text" class="form-control searchInput" placeholder="信息关键词" oninput="ajaxSearchTips()" >
+            <div class="text-left searchTips"  style="position: absolute; z-index:999;">
+                <ul class="list-group" id="searchTips" style="margin: 0px;">
+                </ul>
+            </div>
+        </div>
+      </div>
+      </div>
+      </div>
+    </nav>
+ 
+ 
+ 
+ 
+<div class="main-content">
+    <div class="container ">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="color:#2f2c2c;">
+                <h2 class="title text-center" id="newsTitle"></h2>
+                <hr>
+                <div id="newsContent">
+                
+                </div>
+              
+        </div><!-- /div8 -->
+        
+      </div><!-- /row-->
+    </div> <!-- /container -->
+</div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
+
+<script>
+
+$("#searchInput").focus();
+loadCategory();
+loadNews();
+//页面加载，获取导航栏信息
+function loadCategory(){
+    $.ajax({
+         url:"api/category?format=json",
+         type:"GET",
+         dataType:"json",
+         data:{
+         },
+         success:function(category){
+              for (var index in category) {
+                  var name = category[index].cName;
+                  $("#categoryMenu").append("<li><a  style='color:white;' href='#'>"+name+"</a></li>");
+              }
+         }
+    });
+}  
+   
+   //获取url参数
+  function getUrlParam(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+  }
+   
+ //页面加载，获取信息详细内容
+ function loadNews(){
+   var newsId = getUrlParam("id");
+   $.ajax({
+         url:"api/news?format=json",
+         type:"GET",
+         dataType:"json",
+         data:{
+        	 "id":newsId,
+         },
+         success:function(news){
+                 var newsTitle = news[0].newsTitle;
+                 var newsContent = news[0].newsContent;
+                 $("#newsTitle").html(newsTitle);
+                 $("#newsContent").html(newsContent);
+        }
+    });
+ }
+ //事件监听，鼠标选中提示信息
+  var index=-1;
+  document.onkeydown=function(e){
+      e=window.event||e;
+      switch(e.keyCode){
+        case 38: //向上键
+          index--;
+          changeColor();
+          break;
+        case 40: //向下键
+          index++;
+          changeColor();
+          break;
+        case 13:  //回车
+          enterKey(); 
+          break;
+        default:
+          break;
+      }
+    }
+  //回车打开连接
+  function enterKey(){
+      var linkTip = "tip"+index;
+      var link = $("#"+linkTip);
+      window.location.href=link.attr("href");
+  }
+  // 选中提示改变颜色
+   function changeColor(){
+       var tipsList=$("#searchTips li");//获取所有的li元素  
+        if(index<0){
+            index = -1;
+            return ;
+        }
+        if(index>=tipsList.length){
+            index = tipsList.length-1;
+        }
+       for(var i=0;i<tipsList.length;i++){ 
+           tipsList[i].className="list-group-item";
+       }  
+       tipsList[index].className="tipSelected list-group-item";
+   }
+   //进行搜索，实时提示
+    function ajaxSearchTips(){
+        var keyword = $("#searchInput").val();
+        $("#searchTips").html("");
+        $.ajax({
+               url:"api/news?format=json",
+               type:"GET",
+               dataType:"json",
+               data:{
+                "title":keyword
+               },
+               success:function(news){
+                   for (var index in news) {
+                       var newsId = news[index].newsId;
+                       var title = news[index].newsTitle;
+                       $("#searchTips").append("<li class='list-group-item'><a id='tip"+index+"' href='news.html?id="+newsId+"'>"+title+"</a></li>");
+                   }
+               }
+            });
+        
+    }
+</script>

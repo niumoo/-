@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.codingme.dao.AdminDao;
-import net.codingme.po.Admin;
+import net.codingme.dao.UserDao;
+import net.codingme.po.User;
 import net.codingme.util.JDBCTool;
 
 /** 
@@ -16,7 +16,7 @@ import net.codingme.util.JDBCTool;
  * 
  * @author Niu on 2017年9月6日 下午12:43:07
  */
-public class AdminDaoImpl implements AdminDao {
+public class UserDaoImpl implements UserDao {
 
 	/**
 	 * 增加
@@ -48,7 +48,7 @@ public class AdminDaoImpl implements AdminDao {
 	 * @return List
 	 */
 	@Override
-	public List<Admin> select(String sql, Object... args) {
+	public List<User> select(String sql, Object... args) {
 		Connection conn = JDBCTool.getConnection();
 		ResultSet resultSet = null;
 		try {
@@ -64,7 +64,7 @@ public class AdminDaoImpl implements AdminDao {
 			e.printStackTrace();
 		}
 		
-		List<Admin> list =null;
+		List<User> list =null;
 		try {
 			list= analyzeResultSet(resultSet);
 		} catch (SQLException e) {
@@ -75,8 +75,8 @@ public class AdminDaoImpl implements AdminDao {
 	}
 	
 	// 解析ResultSet
-	public List<Admin> analyzeResultSet(ResultSet resultSet) throws SQLException {
-		List<Admin> list = new ArrayList<Admin>();
+	public List<User> analyzeResultSet(ResultSet resultSet) throws SQLException {
+		List<User> list = new ArrayList<User>();
 		while (resultSet.next()) {
 			//用户ID
 			Integer userId = resultSet.getInt("USER_ID");
@@ -90,7 +90,7 @@ public class AdminDaoImpl implements AdminDao {
 			String manegeCategory = resultSet.getString("MANAGE_CATEGORY");
 			//用户的类型
 			int type = resultSet.getInt("TYPE");
-		    Admin admin = new Admin(userId, type, userName, userEmail, password, manegeCategory);
+		    User admin = new User(userId, type, userName, userEmail, password, manegeCategory);
 		    list.add(admin);
 		}
 		return list;

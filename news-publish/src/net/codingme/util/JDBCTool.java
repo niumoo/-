@@ -16,12 +16,13 @@ import java.sql.Statement;
 public class JDBCTool {
 	
 	private static String DRIVER = "com.mysql.jdbc.Driver";
-	private static String URL = "jdbc:mysql://localhost:3306/news-publish?useUnicode=true&amp;characterEncoding=utf-8";
+	private static String URL = "jdbc:mysql://localhost:3306/news-publish?useUnicode=true&characterEncoding=UTF-8";
 	private static String USERNAME = "root";
 	private static String PWD = "123";
 	private static Connection conn = null;
 
-	static {
+	// 静态方法得到数据库连接
+	public static Connection getConnection() {
 		try {
 			// 注册驱动
 			Class.forName(DRIVER);
@@ -33,10 +34,6 @@ public class JDBCTool {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	// 静态方法得到数据库连接
-	public static Connection getConnection() {
 		return conn;
 	}
 
@@ -78,6 +75,7 @@ public class JDBCTool {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		} finally {
 			close(null, null, conn);
 		}

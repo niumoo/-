@@ -4,7 +4,7 @@ package net.codingme.po;
  * 
  * @author Niu on 2017年9月4日 下午3:26:30
  */
-public class Admin {
+public class User {
 	//用户id
 	private Integer userId;
 	//用户类型1：管理员2普通用户
@@ -48,7 +48,7 @@ public class Admin {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public Admin(Integer userId, Integer type, String userName, String userEmail, String password,
+	public User(Integer userId, Integer type, String userName, String userEmail, String password,
 			String manegeCategory) {
 		super();
 		this.userId = userId;
@@ -59,7 +59,7 @@ public class Admin {
 		this.manegeCategory = manegeCategory;
 	}
 	
-	public Admin(){
+	public User(){
 		
 	}
 

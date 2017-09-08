@@ -1,0 +1,56 @@
+body {
+	margin-bottom: 0px;
+	background: none;
+	color: white;
+}
+/* 全局背景 */
+.full {
+	padding-top: 30px;
+/* 	background-color: #1596F5; */
+    background:url(../img/bg.jpg) fixed  no-repeat 0px 0px;
+	width: 100%;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+/* 重新定义导航颜色 */
+.topMenu {
+    border-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+	height: 200px;
+}
+/* 搜索框 */
+.searchInput {
+	margin-top: 120px;
+	width: 500px;
+	max-width:100%;
+	height: 40px;
+	line-height: 24px;
+	padding: 10px 13px;
+	-webkit-border-radius: 3px 0 0 3px;
+	border-radius: 3px 0 0 3px;
+}
+/* 搜索提示CSS */
+.searchTips {
+	background-color: white;
+	width: 500px;
+	color: black;
+}
+
+.searchTips ul li a {
+	color: black;
+}
+/* 选中的提示的北背景颜色 */
+.tipSelected {
+	background-color: #bbb;
+}
+
+/* 信息展示页面的背景色和最小高度 */
+.main-content {
+	padding-top:30px;
+    background-color: #fbfbfb;
+    min-height: 412px;
+    padding-bottom: 50px;
+}

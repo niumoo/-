@@ -17,15 +17,12 @@ public interface CategoryService {
 	public boolean add(HttpServletRequest request);
 
 	// 删除栏目
-	public boolean delete(Integer cId);
+	public boolean delete(HttpServletRequest request);
 
 	// 更新栏目
 	public boolean update(HttpServletRequest request);
 
 	// 查询全部栏目信息
-	public List<Category> select();
+	public List<Category> select(HttpServletRequest request);
 
-	// 根据栏目ID查询栏目信息
-	public List<Category> selectByCid(Integer cId);
-	
 }

@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -74,6 +75,47 @@ public class NewsDaoImpl implements NewsDao{
 		JDBCTool.close(resultSet, null, conn);
 		return list;
 	}
+
+	/**
+	 * 模糊查询
+	 * 
+	 * @param sql SQL语句，自定义的值用问号表示
+	 * @param args  参数列表，对应sql中问号顺序
+	 * @return List
+	 */
+	@Override
+	public List<News> likeSelect(String sql, Object... args) {
+		Connection conn = JDBCTool.getConnection();
+		ResultSet resultSet = null;
+		try {
+			PreparedStatement pst = conn.prepareStatement(sql);
+			int index = 1;
+			if (args != null) {
+				for (Object object : args) {
+					pst.setObject(index++, "%"+object+"%");
+				}
+			}
+			resultSet = pst.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		List<News> list = new ArrayList<News>();
+		try {
+			while (resultSet.next()) {
+				//信息id
+				Integer newsId = resultSet.getInt("NEWS_ID");
+				//信息标题
+				String newsTitle = resultSet.getString("NEWS_TITLE");
+			    News news = new News(newsId, null, newsTitle, null, null, null, null);
+			    list.add(news);
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		JDBCTool.close(resultSet, null, conn);
+		return list;
+	}
 	
 	// 解析ResultSet
 	public List<News> analyzeResultSet(ResultSet resultSet) throws SQLException {
@@ -98,8 +140,6 @@ public class NewsDaoImpl implements NewsDao{
 		}
 		return list;
 	}
-	
-
 	
 
 }

@@ -26,6 +26,9 @@ public interface NewsDao {
 	// 查询全部信息
 	public List<News> select(String sql, Object... args);
 	
+	// 查询全部信息
+	public List<News> likeSelect(String sql, Object... args);
+	
 	//解析数据
 	public List<News> analyzeResultSet(ResultSet resultSet) throws SQLException;
 

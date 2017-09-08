@@ -15,14 +15,12 @@ public interface NewsService {
 	public boolean add(HttpServletRequest request);
 
 	// 删除信息
-	public boolean delete(Integer newsId);
+	public boolean delete(HttpServletRequest request);
 
 	// 更新信息
 	public boolean update(HttpServletRequest request);
 
 	// 查询全部信息
-	public List<News> select();
+	public List<News> select(HttpServletRequest request);
 
-	// 根据栏目ID查询信息
-	public List<News> selectByCid(Integer cId);
 }
