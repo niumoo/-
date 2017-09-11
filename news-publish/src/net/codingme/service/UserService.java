@@ -15,13 +15,13 @@ import net.codingme.po.Category;
 public interface UserService {
 	
 	// 新增用户
-	public boolean add(HttpServletRequest request);
+	public String add(HttpServletRequest request);
 
 	// 删除用户
 	public boolean delete(HttpServletRequest request);
 
 	// 更新用户
-	public boolean update(HttpServletRequest request);
+	public String update(HttpServletRequest request);
 
 	// 查询全部用户信息
 	public List<User> select(HttpServletRequest request);

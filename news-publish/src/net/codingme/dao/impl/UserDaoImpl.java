@@ -83,7 +83,7 @@ public class UserDaoImpl implements UserDao {
 			//用户昵称
 			String userName = resultSet.getString("USER_NAME");
 			//用户登陆用的邮箱
-			String userEmail = resultSet.getString("USER_NAME");
+			String userEmail = resultSet.getString("USER_EMAIL");
 			//用户登陆用的密码
 			String password = resultSet.getString("PASSWORD");
 			//用户能管理的栏目ID

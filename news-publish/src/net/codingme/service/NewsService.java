@@ -12,15 +12,17 @@ import net.codingme.po.News;
 public interface NewsService {
 
 	// 新增信息
-	public boolean add(HttpServletRequest request);
+	public String add(HttpServletRequest request);
 
 	// 删除信息
 	public boolean delete(HttpServletRequest request);
 
 	// 更新信息
-	public boolean update(HttpServletRequest request);
+	public String update(HttpServletRequest request);
 
 	// 查询全部信息
 	public List<News> select(HttpServletRequest request);
+	
+	public int selectCount(String cId);
 
 }

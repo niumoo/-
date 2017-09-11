@@ -1,0 +1,79 @@
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<title>扣钉信息后台登陆</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/loginStyle.css" rel="stylesheet">
+<style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255,255,255,.38) solid !important;
+    border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+</style></head>
+<body>
+    <div class="login-page">
+        <div class="form">
+           <form1 class="register-form">
+                <input type="text" placeholder="name"> 
+                <input type="password" placeholder="password"> <input type="text" placeholder="email address">
+                <button>create</button>
+                <p class="message"> Already registered? <a href="#">Sign In</a> </p>
+            </form1>
+            <form1 class="login-form">
+                <input type="text" placeholder="username" id="emailLogin"> 
+                <input type="password" placeholder="password" id="passwordLogin">
+                <button onclick="login()">login</button>
+                <p class="message">Not registered? <a href="#">Create an account</a></p>
+            </form1>
+        </div>
+    </div>
+    
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+//登陆注册切换
+$('.message a').click(function(){
+       $('form1').animate({height: "toggle", opacity: "toggle"}, "slow");
+});
+//登陆代码
+    function login() {
+        var email = $("#emailLogin").val();
+        var password = $("#passwordLogin").val();
+            $.ajax({
+                url : "api/login", //请求的url地址
+                dataType : "json", //返回格式为json
+                async : true, 
+                data : {
+                    "email":email,
+                    "password" : password,
+                }, 
+                type : "POST", 
+                 success:function(user){
+                     if(user == null){
+                    	 alert("用户名或者密码有误");
+                         return ;
+                     }
+                     var username = user.userName;
+                     var type = user.type;
+                     if(type != null && username != null ){
+                    	  window.location.href="admin/index.html?id="+user.userId; 
+                     }
+                    },
+                error : function() {
+                    alert("呀，服务器出现了错误");
+                }
+            });
+        }
+</script></body></html>

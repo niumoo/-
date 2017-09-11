@@ -1,5 +1,7 @@
 package net.codingme.po;
 
+
+
 /**
  * 信息表对应的实体类
  * 
@@ -20,6 +22,17 @@ public class News {
 	private String newsFile2;
 	// 附件3
 	private String newsFile3;
+	// 发布时间
+	private String newsCreateTime;
+	
+
+	public String getNewsCreateTime() {
+		return newsCreateTime;
+	}
+
+	public void setNewsCreateTime(String newsCreateTime) {
+		this.newsCreateTime = newsCreateTime;
+	}
 
 	public Integer getNewsId() {
 		return newsId;
@@ -78,7 +91,7 @@ public class News {
 	}
 
 	public News(Integer newsId, Integer cId, String newsTitle, String newsContent, String newsFile1, String newsFile2,
-			String newsFile3) {
+			String newsFile3,String newsCreateTime) {
 		super();
 		this.newsId = newsId;
 		this.cId = cId;
@@ -87,9 +100,18 @@ public class News {
 		this.newsFile1 = newsFile1;
 		this.newsFile2 = newsFile2;
 		this.newsFile3 = newsFile3;
+		this.newsCreateTime = newsCreateTime;
 	}
 
 	public News() {
 	}
+
+	@Override
+	public String toString() {
+		return "News [newsId=" + newsId + ", cId=" + cId + ", newsTitle=" + newsTitle + ", newsContent=" + newsContent
+				+ "]";
+	}
+	
+	
 
 }

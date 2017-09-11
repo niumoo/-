@@ -47,20 +47,22 @@ public class RESTFulUser extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
-		boolean result = userService.add(request);
-		out.print(result);
+		String result = userService.add(request);
+		String json = "{\"result\":\""+result+"\"}";
+		out.print(json);
 		out.close();
 	}
 	
 	/**
 	 * PUT：更新用户
-	 * /api/user?id=1	更新id为1的用户
+	 * /api/user	更新id为1的用户
 	 */
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
-		boolean result = userService.update(request);
-		out.print(result);
+		String result = userService.update(request);
+		String json = "{\"result\":\""+result+"\"}";
+		out.print(json);
 		out.close();
 	}
 	

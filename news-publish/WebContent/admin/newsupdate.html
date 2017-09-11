@@ -1,0 +1,557 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>文章更新</title>
+    <!-- 编辑器css效果 -->
+    <link href="./editor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="./editor/third-party/jquery.min.js"></script>
+    <script type="text/javascript" src="./editor/third-party/template.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="./editor/umeditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="./editor/umeditor.min.js"></script>
+    <script type="text/javascript" src="./editor/lang/zh-cn/zh-cn.js"></script>
+    <!-- 页面CSS效果 -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/adminStyle.css" rel="stylesheet">
+	<style id="style-1-cropbar-clipper">
+		.en-markup-crop-options {
+		    top: 18px !important;
+		    left: 50% !important;
+		    margin-left: -100px !important;
+		    width: 200px !important;
+		    border: 2px rgba(255, 255, 255, .38) solid !important;
+		    border-radius: 4px !important;
+		}
+		
+		.en-markup-crop-options div div:first-of-type {
+		    margin-left: 0px !important;
+		}
+        h1{
+            font-family: "微软雅黑";
+            font-weight: normal;
+        }
+        .btn {
+            display: inline-block;
+            *display: inline;
+            padding: 4px 12px;
+            margin-bottom: 0;
+            *margin-left: .3em;
+            font-size: 14px;
+            line-height: 20px;
+            color: #333333;
+            text-align: center;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+            vertical-align: middle;
+            cursor: pointer;
+            background-color: #f5f5f5;
+            *background-color: #e6e6e6;
+            background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+            background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+            background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+            background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
+            background-repeat: repeat-x;
+            border: 1px solid #cccccc;
+            *border: 0;
+            border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+            border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+            border-bottom-color: #b3b3b3;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
+            filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+            *zoom: 1;
+            -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+            -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn:hover,
+        .btn:focus,
+        .btn:active,
+        .btn.active,
+        .btn.disabled,
+        .btn[disabled] {
+            color: #333333;
+            background-color: #e6e6e6;
+            *background-color: #d9d9d9;
+        }
+
+        .btn:active,
+        .btn.active {
+            background-color: #cccccc \9;
+        }
+
+        .btn:first-child {
+            *margin-left: 0;
+        }
+
+        .btn:hover,
+        .btn:focus {
+            color: #333333;
+            text-decoration: none;
+            background-position: 0 -15px;
+            -webkit-transition: background-position 0.1s linear;
+            -moz-transition: background-position 0.1s linear;
+            -o-transition: background-position 0.1s linear;
+            transition: background-position 0.1s linear;
+        }
+
+        .btn:focus {
+            outline: thin dotted #333;
+            outline: 5px auto -webkit-focus-ring-color;
+            outline-offset: -2px;
+        }
+
+        .btn.active,
+        .btn:active {
+            background-image: none;
+            outline: 0;
+            -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+            -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn.disabled,
+        .btn[disabled] {
+            cursor: default;
+            background-image: none;
+            opacity: 0.65;
+            filter: alpha(opacity=65);
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span> <span
+                        class="icon-bar"></span> <span class="icon-bar"></span> <span
+                        class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">扣钉信息后台管理</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav navbar-right">
+                <li id="username"></li>
+                <li id="usertype"></li>
+                <li><a href='#' data-toggle="modal" data-target="#update-password-model">修改密码</a> </li>
+              </ul>
+            </div>
+    </nav>
+<!-- 修改密码模态框（Modal） -->
+<div class="modal fade" id="update-password-model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 320px;">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                                                 修改密码
+                </h4>
+            </div>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 add-user ">
+                      <br/>
+                       <p>旧密码</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="password" class="form-control"  id="oldPassword">
+                      <p>新密码</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="password" class="form-control"  id="newPassword">
+                      <p>确认密码</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="password" class="form-control"  id="checkNewPwd">
+                      <br/>
+                      <button type="button" class="btn btn-danger" style="float:right" onclick="updateUserPassword()">确定修改</button>
+                      <br/> <br/> 
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div><!--修改密码模态框结束 -->
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="active"><a href="#" onclick="toNews()">信息管理 <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#" onclick="toCategory()">栏目管理</a></li>
+                    <li><a href="#" onclick="toUser()">用户管理</a></li>
+                    <li><a href="#" onclick="loginout()">退出登陆</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                
+                <input style="width: 900px;display:none;" type="text" id="newsId" class="form-control" >
+                <div><span>标题：</span>
+                    <input style="width: 900px;display: inline;" type="text" id="newsTitle" class="form-control">
+                </div>
+                 <br/>
+				<!--style给定宽度可以影响编辑器的最终宽度-->
+				<script type="text/plain" id="myEditor" style="width:100%;height:240px;">
+                     <p>发布内容</p>
+	            </script>
+	            <br/>
+	            <div><span>所属栏目：</span>
+                <select class="form-control" style="width:200px;display: inline;" id="categoryIdList">
+                </select>
+                </div>
+                <br/>
+				<div>
+					<form id= "file1Form">  <span>附件1：</span>
+					    <input id="file1Path" type="text" style="width:200px;display: inline;"  placeholder="上传成功自动显示附件路径" value="" disabled="disabled">
+	                    <input style="width: 200px;display: inline;" type="file" name="uploadFile"  class="">
+	                    <input type="button" onclick="doUpload(1)" class="btn btn-success" value="上传">
+	                 </form>
+                </div>
+                 <br/>
+                 <div>
+                    <form id= "file2Form">  <span>附件2：</span>
+                        <input id="file2Path" type="text" style="width:200px;display: inline;"  placeholder="上传成功自动显示附件路径" value="" disabled="disabled">
+                        <input style="width: 200px;display: inline;" type="file" name="uploadFile"  class="">
+                        <input type="button" onclick="doUpload(2)" class="btn btn-success" value="上传">
+                     </form>
+                </div>
+                 <br/>
+                <div>
+                    <form id= "file3Form">  <span>附件3：</span>
+                        <input id="file3Path" type="text" style="width:200px;display: inline;"  placeholder="上传成功自动显示附件路径" value="" disabled="disabled">
+                        <input style="width: 200px;display: inline;" type="file" name="uploadFile"   class="">
+                        <input type="button" onclick="doUpload(3)" class="btn btn-success" value="上传">
+                     </form>
+                </div>
+                 <br/>
+                <input type="button" onclick="updateNews()" value="发布信息 " class="btn btn-primary" style="float:right">
+				<div class="clear"></div>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../js/bootstrap.min.js"></script>
+</body>
+</html>
+<script type="text/javascript">
+    //实例化编辑器
+    var um = UM.getEditor('myEditor');
+    //按钮的操作
+    function insertHtml() {
+        var value = prompt('插入html代码', '');
+        um.execCommand('insertHtml', value)
+    }
+    function isFocus(){
+        alert(um.isFocus())
+    }
+    function doBlur(){
+        um.blur()
+    }
+    function createEditor() {
+        enableBtn();
+        um = UM.getEditor('myEditor');
+    }
+    
+    function setDisabled() {
+        UM.getEditor('myEditor').setDisabled('fullscreen');
+        disableBtn("enable");
+    }
+
+    function setEnabled() {
+        UM.getEditor('myEditor').setEnabled();
+        enableBtn();
+    }
+    function getContent() {
+        var arr = [];
+        arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+        arr.push("内容为：");
+        arr.push(UM.getEditor('myEditor').getContent());
+        alert(arr.join("\n"));
+    }
+    
+</script>
+
+
+<script>
+var usertype = "";
+var userManegeCategory="";
+loadUserInfo();
+loadCategoryInfo();
+loadNewsInfo();
+//加载当前登陆的用户信息
+function loadUserInfo(){
+    var userId = getUrlParam("id");
+    $.ajax({
+        url:"../api/user?format=json",
+        type:"GET",
+        dataType:"json",
+        async:false,
+        data:{
+            "id":userId,
+        },
+        success:function(user){
+                if(user == null){
+                    alert("你还没有登陆！-.-");
+                    window.location.href="../login.html";
+                }
+                var username = user[0].userName;
+                usertype = user[0].type;
+                userManegeCategory = user[0].manegeCategory;
+                var type="";
+                if(usertype == 1){
+                	type = "超级管理员";
+                }
+                if(usertype == 2){
+                	type = "普通管理员";
+                }
+                $("#username").html("<a href='#'>当前用户："+username+"</a>");
+                $("#usertype").html("<a href='#'>身份："+type+"</a>");
+       }
+   });  
+}
+
+
+//页面加载，获取导航栏目信息
+function loadCategoryInfo(){
+	if(usertype ==2 ){
+	    $.ajax({
+	         url:"../api/category?format=json",
+	         type:"GET",
+	         dataType:"json",
+	         async:false,
+	         data:{
+	        	 "id":userManegeCategory,
+	         },
+	         success:function(category){
+	              for (var index in category) {
+	                  var name = category[index].cName;
+	                  var cId = category[index].cId;
+	                  $("#categoryIdList").append("<option value='"+cId+"'>"+name+"</option>");
+	              }
+	         }
+	    });
+	}
+    if(usertype ==1 ){
+        $.ajax({
+             url:"../api/category?format=json",
+             type:"GET",
+             dataType:"json",
+             async:false,
+             data:{
+             },
+             success:function(category){
+                  for (var index in category) {
+                      var name = category[index].cName;
+                      var cId = category[index].cId;
+                      $("#categoryIdList").append("<option value='"+cId+"'>"+name+"</option>");
+                  }
+             }
+        });
+    }
+}  
+
+//附件上传功能
+function doUpload(index) {  
+    var formData;
+    if(index ==1 ){
+    	formData = new FormData($( "#file1Form" )[0]);
+    }
+    if(index ==2 ){
+        formData = new FormData($( "#file2Form" )[0]);
+    }
+    if(index ==3 ){
+        formData = new FormData($( "#file3Form" )[0]);
+    }
+    $.ajax({  
+         url: '../api/file' ,  
+         type: 'POST',  
+         data: formData,  
+         async: false,  
+         cache: false,  
+         contentType: false,  
+         processData: false,  
+         success: function (returndata) {
+        	 var json = JSON.parse(returndata); 
+        	 var result = json.result;
+        	 var url = json.url;
+        	 if(result == "false"){
+        		 alert(url);
+        		 return ;
+        	 }
+        	 alert(url);
+        	 if(index == 1){
+        		 $("#file1Path").val(url);
+        	 }
+        	 if(index == 2){
+                 $("#file2Path").val(url);
+             }
+        	 if(index == 3){
+                 $("#file3Path").val(url);
+             }
+         },  
+         error: function (returndata) {  
+             alert(returndata);  
+         }  
+    });  
+}  
+
+//加载要更新的文章信息
+function loadNewsInfo(){
+	var newsId = getUrlParam("newsId");
+	   $.ajax({
+	         url:"../api/news?format=json",
+	         type:"GET",
+	         dataType:"json",
+	         data:{
+	             "id":newsId,
+	         },
+	         success:function(news){
+	        	     var newsId =news[0].newsId;
+	                 var newsTitle = news[0].newsTitle;
+	                 var newsContent = news[0].newsContent;
+	                 var cId = news[0].cId;
+	                 var newsFile1 = news[0].newsFile1;
+	                 var newsFile2 = news[0].newsFile2;
+	                 var newsFile3 = news[0].newsFile3;
+	                 if(newsFile1 !=""){
+	                	 $("#file1Path").val(newsFile1);
+	                 }
+	                 if(newsFile2 !=""){
+	                	 $("#file2Path").val(newsFile2);
+                     }
+	                 if(newsFile3 !=""){
+	                	 $("#file3Path").val(newsFile3);
+                     }
+	                 $("#newsId").val(newsId);
+	                 $("#newsTitle").val(newsTitle);
+	                 UM.getEditor('myEditor').setContent(newsContent);
+	                 $("#categoryIdList").val(cId);
+	        }
+	    });
+	
+}
+
+//发布文章
+function updateNews(){
+    var content = UM.getEditor('myEditor').getContent();
+    var title = $("#newsTitle").val();
+    var newsId = $("#newsId").val();
+    var cId = $("#categoryIdList").val();
+    var file1Path = $("#file1Path").val();
+    var file2Path = $("#file2Path").val();
+    var file3Path = $("#file2Path").val();
+    $.ajax({
+        url:"../api/news?format=json",
+        type:"PUT",
+        dataType:"json",
+        data:{
+        	"newsId":newsId,
+        	"title":title,
+        	"content":content,
+        	"cId":cId,
+        	"file1Path":file1Path,
+        	"file2Path":file2Path,
+        	"file3Path":file3Path,
+        },
+        success:function(data){
+            if(data == null){
+                alert("你的操作超出了你的权限范围！");
+                return ;
+            }
+            var tip = data.result;
+            if(tip == "true"){
+                alert("文章已经成功更新");
+                toNews();
+                return ;
+            }
+            alert(tip);
+        }
+     });  
+}
+//退出登陆
+function loginout(){
+     $.ajax({
+        url:"../api/loginout?format=json",
+        type:"GET",
+        dataType:"json",
+        data:{},
+        success:function(result){
+           alert("你已成功注销登陆！");
+           window.location.href="../login.html";
+        }
+     });  
+}
+//修改密码
+function updateUserPassword(){
+    var oldPassword = $("#oldPassword").val();
+    var newPassword = $("#newPassword").val();
+    var checkNewPwd = $("#checkNewPwd").val();
+    if($.trim(oldPassword).length < 1 || 
+            $.trim(newPassword).length < 1 || 
+            $.trim(checkNewPwd).length < 1 ){
+        alert("信息填写不完整！");
+        return ;
+    }
+    if(newPassword != checkNewPwd){
+        alert("两次密码输入不一致！");
+        return ;
+    }
+    $.ajax({
+        url:"../api/user?format=json",
+        type:"PUT",
+        dataType:"json",
+        data:{
+            "oldPassword":oldPassword,            
+            "newPassword":newPassword,
+        },
+        success:function(data){
+            if(data == null){
+                alert("你的操作超出了你的权限范围！");
+                return ;
+            }
+            var tip = data.result;
+            if(tip == "true"){
+                alert("密码已更新！");
+                location.reload([true]);
+                return ;
+            }
+            alert(tip);
+        }
+     }); 
+}
+//获取url参数
+function getUrlParam(name){
+      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);
+      if(r!=null)return  unescape(r[2]); return null;
+}
+
+//跳转到文章发布页面
+function toNewsWrite(){
+    var userId = getUrlParam("id");
+    window.location.href="newswrite.html?id="+userId;
+}
+//跳转到栏目管理页面
+function toCategory(){
+    var userId = getUrlParam("id");
+    window.location.href="category.html?id="+userId;
+}
+//跳转到用户管理页面
+function toUser(){
+    var userId = getUrlParam("id");
+    window.location.href="user.html?id="+userId;
+}
+//跳转到信息管理页面
+function toNews(){
+    var userId = getUrlParam("id");
+    window.location.href="index.html?id="+userId;
+}
+</script>

@@ -1,9 +1,11 @@
 package net.codingme.dao.impl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -100,14 +102,17 @@ public class NewsDaoImpl implements NewsDao{
 			e.printStackTrace();
 		}
 		
-		List<News> list = new ArrayList<News>();
+		List<News> list = null;
 		try {
 			while (resultSet.next()) {
 				//信息id
 				Integer newsId = resultSet.getInt("NEWS_ID");
 				//信息标题
 				String newsTitle = resultSet.getString("NEWS_TITLE");
-			    News news = new News(newsId, null, newsTitle, null, null, null, null);
+			    News news = new News(newsId, null, newsTitle, null, null, null, null,null);
+			    if(list == null){
+			    	list = new ArrayList<News>();
+			    }
 			    list.add(news);
 			} 
 		} catch (SQLException e) {
@@ -135,7 +140,11 @@ public class NewsDaoImpl implements NewsDao{
 		    String newsFile2 = resultSet.getString("NEWS_FILE2");
 			//附件3
 		    String newsFile3 = resultSet.getString("NEWS_FILE3");
-		    News news = new News(newsId, cId, newsTitle, newsContent, newsFile1, newsFile2, newsFile3);
+		    //发布时间
+		    Date newsCreateTime = resultSet.getDate("NEWS_CREATE_TIME");
+		    SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		    String createTime = dateFormater.format(newsCreateTime);
+		    News news = new News(newsId, cId, newsTitle, newsContent, newsFile1, newsFile2, newsFile3,createTime);
 		    list.add(news);
 		}
 		return list;

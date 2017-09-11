@@ -1,6 +1,8 @@
 package net.codingme.util;
 
 import java.math.BigDecimal;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,12 +31,38 @@ public class StringUtil {
         return true;
     }
     
+    //静态方法，对字符串进行MD5加密
+    public static String getMd5(String plainText) {  
+        try {  
+            MessageDigest md = MessageDigest.getInstance("MD5");  
+            md.update(plainText.getBytes());  
+            byte b[] = md.digest();  
+  
+            int i;  
+  
+            StringBuffer buf = new StringBuffer("");  
+            for (int offset = 0; offset < b.length; offset++) {  
+                i = b[offset];  
+                if (i < 0)  
+                    i += 256;  
+                if (i < 16)  
+                    buf.append("0");  
+                buf.append(Integer.toHexString(i));  
+            }  
+            //32位加密  
+            return buf.toString();  
+            // 16位的加密  
+            //return buf.toString().substring(8, 24);  
+        } catch (NoSuchAlgorithmException e) {  
+            e.printStackTrace();  
+            return null;  
+        }  
+    }  
+    
+    
     public static void main(String[] args) {
-		System.out.println(isNumeric("12313123"));
-		System.out.println(isNumeric("12313d1123"));
-		System.out.println(isNumeric("1231d3123"));
-		System.out.println(isNumeric("123131123"));
-		System.out.println(isNumeric("123131112@23"));
+    	String md5 = getMd5("123");
+    	System.out.println(md5);
 	}
 
 }

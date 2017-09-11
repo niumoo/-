@@ -25,7 +25,7 @@
           
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a style="color:white;" href="#">登陆</a></li>
+            <li><a style="color:white;" href="login.html">登陆</a></li>
           </ul>
         </div><!--/.nav-collapse -->
         <!-- 使用绝对定位和相对定位和层数设定来让搜索提示悬浮在最上层 -->
@@ -82,7 +82,8 @@ function loadCategory(){
          success:function(category){
               for (var index in category) {
                   var name = category[index].cName;
-                  $("#categoryMenu").append("<li><a  style='color:white;' href='#'>"+name+"</a></li>");
+                  var cId = category[index].cId;
+                  $("#categoryMenu").append("<li><a  style='color:white;' href='list.html?cId="+cId+"'>"+name+"</a></li>");
               }
          }
     });
@@ -108,8 +109,23 @@ function loadCategory(){
          success:function(news){
                  var newsTitle = news[0].newsTitle;
                  var newsContent = news[0].newsContent;
+                 var newsFile1 = news[0].newsFile1;
+                 var newsFile2 = news[0].newsFile2;
+                 var newsFile3 = news[0].newsFile3;
                  $("#newsTitle").html(newsTitle);
                  $("#newsContent").html(newsContent);
+                 
+                 $("#newsContent").append("<hr>");
+                 if(newsFile1 != "" && newsFile1 != null){
+                	 $("#newsContent").append(" <p>附件：<a  target='_blank' href='api/file?path="+newsFile1+"'>"+newsFile1+"</a></p>");
+                 }
+                 if(newsFile2 != "" && newsFile2 != null){
+                     $("#newsContent").append(" <p>附件：<a  target='_blank' href='api/file?path="+newsFile2+"'>"+newsFile2+"l</a></p>");
+                 }
+                 if(newsFile3 != "" && newsFile3 != null){
+                     $("#newsContent").append(" <p>附件：<a  target='_blank' href='api/file?path="+newsFile3+"'>"+newsFile3+"</a></p>");
+                 }
+                 
         }
     });
  }

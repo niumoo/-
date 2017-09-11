@@ -48,6 +48,13 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public String getManegeCategory() {
+		return manegeCategory;
+	}
+	public void setManegeCategory(String manegeCategory) {
+		this.manegeCategory = manegeCategory;
+	}
 	public User(Integer userId, Integer type, String userName, String userEmail, String password,
 			String manegeCategory) {
 		super();

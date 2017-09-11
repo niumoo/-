@@ -59,10 +59,12 @@ public class ServletUtil {
 			for (String url : arrayUrl) {
 				String key = url.split("=")[0];
 				String value = url.split("=")[1];
+				value = java.net.URLDecoder.decode(value);
 				map.put(key, value);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+//			e.printStackTrace();
+			return map;
 		}
 		return map;
 	}

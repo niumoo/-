@@ -6,8 +6,8 @@ body {
 /* 全局背景 */
 .full {
 	padding-top: 30px;
-/* 	background-color: #1596F5; */
-    background:url(../img/bg.jpg) fixed  no-repeat 0px 0px;
+ 	background-color: #428bca; 
+  /*  background:url(../img/bg.jpg) fixed  no-repeat 0px 0px;*/
 	width: 100%;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -53,4 +53,7 @@ body {
     background-color: #fbfbfb;
     min-height: 412px;
     padding-bottom: 50px;
+}
+.main-content img{
+    max-width: 99%;
 }

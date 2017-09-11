@@ -20,7 +20,7 @@ import net.sf.json.JSONArray;
  * 
  * @author Niu on 2017年9月6日 下午1:29:34
  */
-@WebServlet("/api/news/*")
+@WebServlet({"/api/news","/api/news/count"})
 public class RESTFulNews extends HttpServlet {
 	
 	private NewsService newsService = new NewsServiceImpl();
@@ -33,10 +33,25 @@ public class RESTFulNews extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
+		String url = request.getRequestURI().replace(request.getContextPath(),"");
 		
+		if(url.startsWith("/api/news/count")){
+			String cId = request.getParameter("cId");
+			int count = newsService.selectCount(cId);
+			int pageCount=0;
+			if(count%5 == 0){
+				pageCount = count /5;
+			}else{
+				pageCount = count /5 + 1;
+			}
+			String json = "{\"count\":\""+count+"\",\"pageCount\":\""+pageCount+"\"}";
+			out.print(json);
+			out.close();
+			return;
+		}
 		List<News> news = newsService.select(request);
 		JSONArray jsonArray = JSONArray.fromObject(news);
-		PrintWriter out = response.getWriter();
 		out.print(jsonArray);
 		out.close();
 	}
@@ -49,8 +64,9 @@ public class RESTFulNews extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		PrintWriter out = response.getWriter();
-		boolean result = newsService.add(request);
-		out.print(result);
+		String result = newsService.add(request);
+		String json = "{\"result\":\""+result+"\"}";
+		out.print(json);
 		out.close();
 	}
 	
@@ -62,9 +78,9 @@ public class RESTFulNews extends HttpServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		PrintWriter out = response.getWriter();
-		boolean result = newsService.update(request);
-		out.print(result);
-		out.close();
+		String result = newsService.update(request);
+		String json = "{\"result\":\""+result+"\"}";
+		out.print(json);
 	}
 	
 	/**

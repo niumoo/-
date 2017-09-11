@@ -1,0 +1,477 @@
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>用户管理</title>
+<!-- Bootstrap -->
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../css/adminStyle.css" rel="stylesheet">
+
+<style id="style-1-cropbar-clipper">
+.en-markup-crop-options {
+	top: 18px !important;
+	left: 50% !important;
+	margin-left: -100px !important;
+	width: 200px !important;
+	border: 2px rgba(255, 255, 255, .38) solid !important;
+	border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+	margin-left: 0px !important;
+}
+
+</style>
+</head>
+
+<body>
+
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">扣钉信息后台管理</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+	          <ul class="nav navbar-nav navbar-right">
+	            <li id="username"></li>
+	            <li id="usertype"></li>
+	            <li><a href='#' data-toggle="modal" data-target="#update-password-model">修改密码</a> </li>
+	          </ul>
+			</div>
+	</nav>
+<!-- 修改密码模态框（Modal） -->
+<div class="modal fade" id="update-password-model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 320px;">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                                                 修改密码
+                </h4>
+            </div>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 add-user ">
+                      <br/>
+                       <p>旧密码</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="password" class="form-control"  id="oldPassword">
+                      <p>新密码</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="password" class="form-control"  id="newPassword">
+                      <p>确认密码</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="password" class="form-control"  id="checkNewPwd">
+                      <br/>
+                      <button type="button" class="btn btn-danger" style="float:right" onclick="updateUserPassword()">确定修改</button>
+                      <br/> <br/> 
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div><!--修改密码模态框结束 -->
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3 col-md-2 sidebar">
+				<ul class="nav nav-sidebar">
+					<li><a href="#" onclick="toNews()">信息管理 <span class="sr-only">(current)</span></a></li>
+					<li><a href="#" onclick="toCategory()">栏目管理</a></li>
+					<li class="active"><a href="#" onclick="toUser()">用户管理</a></li>
+					<li><a href="#" onclick="loginout()">退出登陆</a></li>
+				</ul>
+			</div>
+			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <div style="width: 70%;">    
+                  <input type="button" data-toggle="modal" data-target="#add-modal"
+                 value="添加用户 " class="btn btn-primary" style="float:right;"><br/>
+                 </div>
+            <table class="table table-striped" style="width: 70%; float: left;">
+              <thead>
+                <tr>
+                  <th>编号</th>
+                  <th>用户昵称</th>
+                  <th>邮箱</th>
+                  <th>身份</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="userList">
+              </tbody>
+            </table>
+
+			</div>
+		</div>
+	</div>
+	
+<!-- 添加模态框（Modal） -->
+<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 320px;">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                                                             添加用户
+                </h4>
+            </div>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 add-user ">
+                      <br/>
+                      <p>用户ID</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="text" class="form-control" value="自动生成" readonly="readonly">
+                      <p>用户名称</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="text" class="form-control"  id="addUserName">
+                      <p>用户邮箱</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="text" class="form-control"  id="addUserEmail">
+                      <p>登陆密码</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="password" class="form-control"  id="addUserPassword">
+                       <p>确认密码</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="password" class="form-control"  id="addUserPasswordCheck">
+                       <p>身份类型</p>
+                       <select class="form-control" style="width:280px" id="addUserType">
+                            <option value="1">超级管理员</option>
+                            <option value="2">普通管理员</option>
+                       </select>
+                        <br/>
+                      <button type="button" class="btn btn-primary " style="float:right" onclick="addUser()">添加用户</button>
+                      <br/> <br/> 
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div><!--添加模态框结束 -->
+<!-- 更新模态框（Modal） -->
+<div class="modal fade" id="update-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 320px;">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                 更新用户信息
+                </h4>
+            </div>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 add-user ">
+                      <br/>
+                      <p>用户ID</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="text" class="form-control" id="updateUserId" value="自动生成" readonly="readonly">
+                      <p>用户名称</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="text" class="form-control"  id="updateUserName">
+                      <p>用户邮箱</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="text" class="form-control"  id="updateUserEmail">
+<!--                  <p>登陆密码</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="password" class="form-control"  id="updateUserPassword"> -->
+                      <p>身份类型</p>
+                      <select class="form-control" style="width:280px" id="updateUserType">
+                            <option value="1">超级管理员</option>
+                            <option value="2">普通管理员</option>
+                      </select>
+                        <br/>
+                      <button type="button" class="btn btn-primary " style="float:right" onclick="updateUser()">更新信息</button>
+                      <br/> <br/> 
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div><!--更新模态框结束 -->
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../js/jquery-2.1.4.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+
+</body>
+</html>
+<script>
+
+//当前用户管理的栏目Id
+var userManegeCategory ="";
+loadUserInfo();
+loadUserListInfo();
+
+//加载当前登陆的用户信息
+function loadUserInfo(){
+    var userId = getUrlParam("id");
+    $.ajax({
+        url:"../api/user?format=json",
+        type:"GET",
+        dataType:"json",
+        async:false,
+        data:{
+            "id":userId,
+        },
+        success:function(user){
+	        	if(user == null){
+	        		alert("你还没有登陆！-.-");
+	        		window.location.href="../login.html";
+	        	}
+	            var username = user[0].userName;
+	            var usertype = user[0].type;
+	            userManegeCategory = user[0].manegeCategory;
+	            if(usertype == 1){
+	            	usertype = "超级管理员";
+	            }
+	            if(usertype == 2){
+	             	usertype = "普通管理员";
+	            }
+	            $("#username").html("<a href='#'>当前用户："+username+"</a>");
+	            $("#usertype").html("<a href='#'>身份："+usertype+"</a>");
+       }
+   });	
+}
+
+//页面加载，获取导航栏目信息
+function loadUserListInfo(){
+    $.ajax({
+         url:"../api/user?format=json",
+         type:"GET",
+         dataType:"json",
+         data:{
+         },
+         success:function(userList){
+              for (var index in userList) {
+                  var userName = userList[index].userName;
+                  var userId = userList[index].userId;
+                  var email = userList[index].userEmail;
+                  var type = userList[index].type;
+                  var cId = "";
+                  if(type == 1){
+                	  cId="超级管理员";
+                  }
+                  if(type ==2 ){
+                	  cId="普通用户";
+                  }
+                  $("#userList").append("<tr><td>"+userId+"</td><td>"+userName+"</td><td>"+email+"</td><td>"+cId+"</td><td><a href='#' "+
+                          " onclick=deleteUser("+userId+")>删除</a> <a href='#' onclick=\"loadUpdateInfo(\'"+userId+"\',\'"+userName+"\',\'"+email+"\',\'"+type+"\')\" data-toggle='modal' data-target='#update-modal'>更新</a></td></tr>");
+              }
+         }
+    });
+} 
+//获取url参数
+function getUrlParam(name){
+      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);
+      if(r!=null)return  unescape(r[2]); return null;
+}
+
+//退出登陆
+function loginout(){
+	 $.ajax({
+	    url:"../api/loginout?format=json",
+	    type:"GET",
+	    dataType:"json",
+	    data:{},
+	    success:function(result){
+	       alert("你已成功注销登陆！");
+	       window.location.href="../login.html";
+	    }
+	 });  
+}
+
+//更新用户，点击更新，加载要更新的数据
+function loadUpdateInfo(userId,username,email,type){
+   $("#updateUserId").val(userId);
+   $("#updateUserName").val(username);
+   $("#updateUserEmail").val(email);
+   $("#updateUserPassword").val();
+   $("#updateUserType").val(type);
+}
+
+//更新用户信息
+function updateUser(){
+	var userId = $("#updateUserId").val();
+    var username = $("#updateUserName").val();
+    var useremail=$("#updateUserEmail").val();
+    var usertype = $("#updateUserType").val();
+    if($.trim(username).length < 1 || 
+            $.trim(useremail).length < 1 || 
+            $.trim(usertype).length < 1){
+        alert("信息填写不完整！");
+        return ;
+    }
+    if(!isEmail(useremail)){
+        alert("邮箱格式不正确");
+        return ;
+    }
+    $.ajax({
+        url:"../api/user?format=json",
+        type:"PUT",
+        dataType:"json",
+        data:{
+            "userId":userId,        	
+            "username":username,
+            "useremail":useremail,
+            "usertype":usertype,
+        },
+        success:function(data){
+            if(data == null){
+                alert("你的操作超出了你的权限范围！");
+                return ;
+            }
+            var tip = data.result;
+            if(tip == "true"){
+                alert("用户信息已更新！");
+                location.reload([true]);
+                return ;
+            }
+            alert(tip);
+        }
+     }); 
+    
+}
+//验证邮箱格式
+function isEmail(str){ 
+	var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/; 
+	return reg.test(str); 
+} 
+//添加用户
+function addUser(){
+	var username = $("#addUserName").val();
+	var useremail=$("#addUserEmail").val();
+	var password = $("#addUserPassword").val();
+	var checkpwd = $("#addUserPasswordCheck").val();
+	var usertype = $("#addUserType").val();
+    if($.trim(username).length < 1 || 
+    		$.trim(useremail).length < 1 || 
+    		$.trim(password).length < 1 ||
+    		$.trim(checkpwd).length < 1 ||
+    		$.trim(usertype).length < 1){
+        alert("信息填写不完整！");
+        return ;
+    }
+    if(!isEmail(useremail)){
+    	alert("邮箱格式不正确");
+    	return ;
+    }
+	if(password != checkpwd){
+	    alert("两次密码输入不一致");		
+	}
+	
+    $.ajax({
+        url:"../api/user?format=json",
+        type:"POST",
+        dataType:"json",
+        data:{
+            "username":username,
+            "useremail":useremail,
+            "password":password,
+            "checkpwd":checkpwd,
+            "usertype":usertype,
+        },
+        success:function(data){
+        	if(data == null){
+                alert("你的操作超出了你的权限范围！");
+                return ;
+            }
+        	var tip = data.result;
+            if(tip == "true"){
+                alert("用户已经成功添加！");
+                location.reload([true]);
+                return ;
+            }
+        	alert(tip);
+        }
+     });
+	
+}
+//删除用户
+function deleteUser(userId){
+	var msg = "你确定要删除这个用户吗？";
+	if (confirm(msg)==false){
+		   return ;
+	}
+    $.ajax({
+        url:"../api/user?format=json",
+        type:"DELETE",
+        dataType:"json",
+        data:{
+            "userId":userId,
+        },
+        success:function(result){
+        	if(result+"" == "false"){
+        		alert("你没有权限删除这个用户！");
+        		return ;
+        	}
+        	if(result+"" == "true"){
+        		alert("用户已经删除！");
+        		location.reload([true]);
+        	}
+        	
+        }
+     });  
+}
+
+//修改密码
+function updateUserPassword(){
+    var oldPassword = $("#oldPassword").val();
+    var newPassword = $("#newPassword").val();
+    var checkNewPwd = $("#checkNewPwd").val();
+    if($.trim(oldPassword).length < 1 || 
+            $.trim(newPassword).length < 1 || 
+            $.trim(checkNewPwd).length < 1 ){
+        alert("信息填写不完整！");
+        return ;
+    }
+    if(newPassword != checkNewPwd){
+    	alert("两次密码输入不一致！");
+    	return ;
+    }
+    $.ajax({
+        url:"../api/user?format=json",
+        type:"PUT",
+        dataType:"json",
+        data:{
+            "oldPassword":oldPassword,            
+            "newPassword":newPassword,
+        },
+        success:function(data){
+            if(data == null){
+                alert("你的操作超出了你的权限范围！");
+                return ;
+            }
+            var tip = data.result;
+            if(tip == "true"){
+                alert("密码已更新！");
+                location.reload([true]);
+                return ;
+            }
+            alert(tip);
+        }
+     }); 
+}
+//跳转到文章发布页面
+function toNewsWrite(){
+    var userId = getUrlParam("id");
+    window.location.href="newswrite.html?id="+userId;
+}
+//跳转到栏目管理页面
+function toCategory(){
+    var userId = getUrlParam("id");
+    window.location.href="category.html?id="+userId;
+}
+//跳转到用户管理页面
+function toUser(){
+    var userId = getUrlParam("id");
+    window.location.href="user.html?id="+userId;
+}
+//跳转到信息管理页面
+function toNews(){
+	var userId = getUrlParam("id");
+	window.location.href="index.html?id="+userId;
+}
+</script>
