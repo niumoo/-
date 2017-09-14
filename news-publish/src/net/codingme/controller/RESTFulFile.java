@@ -112,7 +112,7 @@ public class RESTFulFile extends HttpServlet {
                         String fileName = new File(item.getName()).getName();
                         //判断上传类型
                         if(!fileName.endsWith(".jpg") && !fileName.endsWith(".png") && !fileName.endsWith(".gif") &&
-                           !fileName.endsWith(".txt")){
+                           !fileName.endsWith(".txt") && !fileName.endsWith(".doc") && !fileName.endsWith(".docx")){
                         	result="不允许上传的文件类型！";
                         	break;
                         }

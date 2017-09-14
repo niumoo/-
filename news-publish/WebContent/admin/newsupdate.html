@@ -213,6 +213,7 @@
 					    <input id="file1Path" type="text" style="width:200px;display: inline;"  placeholder="上传成功自动显示附件路径" value="" disabled="disabled">
 	                    <input style="width: 200px;display: inline;" type="file" name="uploadFile"  class="">
 	                    <input type="button" onclick="doUpload(1)" class="btn btn-success" value="上传">
+	                    <input type="button" onclick="deleteFile(1)" class="btn btn-danger" value="清除附件">
 	                 </form>
                 </div>
                  <br/>
@@ -221,6 +222,7 @@
                         <input id="file2Path" type="text" style="width:200px;display: inline;"  placeholder="上传成功自动显示附件路径" value="" disabled="disabled">
                         <input style="width: 200px;display: inline;" type="file" name="uploadFile"  class="">
                         <input type="button" onclick="doUpload(2)" class="btn btn-success" value="上传">
+                        <input type="button" onclick="deleteFile(2)" class="btn btn-danger" value="清除附件">
                      </form>
                 </div>
                  <br/>
@@ -229,10 +231,11 @@
                         <input id="file3Path" type="text" style="width:200px;display: inline;"  placeholder="上传成功自动显示附件路径" value="" disabled="disabled">
                         <input style="width: 200px;display: inline;" type="file" name="uploadFile"   class="">
                         <input type="button" onclick="doUpload(3)" class="btn btn-success" value="上传">
+                        <input type="button" onclick="deleteFile(3)" class="btn btn-danger" value="清除附件">
                      </form>
                 </div>
                  <br/>
-                <input type="button" onclick="updateNews()" value="发布信息 " class="btn btn-primary" style="float:right">
+                <input type="button" onclick="updateNews()" value="更新信息 " class="btn btn-primary" style="float:right">
 				<div class="clear"></div>
             </div>
         </div>
@@ -358,6 +361,19 @@ function loadCategoryInfo(){
     }
 }  
 
+
+//附件清除功能
+function deleteFile(index) {  
+    if(index == 1){
+        $("#file1Path").val("");
+    }
+    if(index == 2){
+        $("#file2Path").val("");
+    }
+    if(index == 3){
+        $("#file3Path").val("");
+    }
+}
 //附件上传功能
 function doUpload(index) {  
     var formData;
@@ -383,7 +399,7 @@ function doUpload(index) {
         	 var result = json.result;
         	 var url = json.url;
         	 if(result == "false"){
-        		 alert(url);
+        		// alert(url);
         		 return ;
         	 }
         	 alert(url);
@@ -541,11 +557,19 @@ function toNewsWrite(){
 }
 //跳转到栏目管理页面
 function toCategory(){
+    if(usertype ==2 ){
+        alert("你的操作超出了你的权限");
+        return ;
+    }
     var userId = getUrlParam("id");
     window.location.href="category.html?id="+userId;
 }
 //跳转到用户管理页面
 function toUser(){
+    if(usertype ==2 ){
+        alert("你的操作超出了你的权限");
+        return ;
+    }
     var userId = getUrlParam("id");
     window.location.href="user.html?id="+userId;
 }

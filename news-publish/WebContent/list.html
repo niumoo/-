@@ -12,7 +12,7 @@
   
   <body>
 
-    <!-- 首页导航 -->
+    <!-- 首页导航 --> 
     <nav class="navbar navbar-default topMenu">
       <div class="container">
         <div class="row">
@@ -58,7 +58,18 @@
       </div><!-- /row-->
     </div> <!-- /container -->
 </div>
-
+<!-- Footer -->
+    <footer style="background-color: white;color: black;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1  text-center">
+                    <p><span>© 2017 - 扣钉信息  <a
+                    href="http://www.codingme.net">www.codingme.net</a></span><br /> <span>Powered
+                    by Java</span></p>
+                </div>
+            </div>
+        </div>
+    </footer>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="js/jquery-2.1.4.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -71,6 +82,7 @@ $("#searchInput").focus();
 var count = "";
 var pageCount = "";
 var page = 1;
+var size = 8;
 loadCategory();
 loadCountInfo();
 loadNewsList();
@@ -120,14 +132,14 @@ function loadCountInfo(){
  //页面加载栏目内容列表
  function loadNewsList(){
     var cId = getUrlParam("cId");
-    var start = (page-1)*5;
+    var start = (page-1)*size;
     $.ajax({
           url:"api/news?format=json",
           type:"GET",
           dataType:"json",
           data:{
               "cId":cId,
-              "size":5,
+              "size":size,
               "start":start,
           },
           success:function(newsList){
@@ -140,7 +152,7 @@ function loadCountInfo(){
                   var newsTitle = newsList[index].newsTitle;
                   var newsTime = newsList[index].newsCreateTime;
                   var newsContent = newsList[index].newsContent;
-                  newsContent = newsContent.substring(0,400);
+                  newsContent = newsContent.substring(0,300);
                   newsTime = newsTime.substring(0,10);
                   $("#newsListDiv").append("<h3 class='page-header' ><a href='news.html?id="+newsId+"'>"+newsTitle+"</a></h3> ");
                   $("#newsListDiv").append("<p>"+newsContent+"</p>");

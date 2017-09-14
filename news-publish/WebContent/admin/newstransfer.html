@@ -1,0 +1,504 @@
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>扣钉信息发布管理</title>
+<!-- Bootstrap -->
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../css/adminStyle.css" rel="stylesheet">
+
+
+
+<style id="style-1-cropbar-clipper">
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255, 255, 255, .38) solid !important;
+    border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+</style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span> <span
+                        class="icon-bar"></span> <span class="icon-bar"></span> <span
+                        class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">扣钉信息后台管理</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav navbar-right">
+                <li id="username"></li>
+                <li id="usertype"></li>
+                <li><a href='#' data-toggle="modal" data-target="#update-password-model">修改密码</a> </li>
+              </ul>
+            </div>
+    </nav>
+<!-- 修改密码模态框（Modal） -->
+<div class="modal fade" id="update-password-model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 320px;">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                                                 修改密码
+                </h4>
+            </div>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 add-user ">
+                      <br/>
+                       <p>旧密码</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="password" class="form-control"  id="oldPassword">
+                      <p>新密码</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="password" class="form-control"  id="newPassword">
+                      <p>确认密码</p>
+                      <input style="width:280px;margin-bottom: 8px;" type="password" class="form-control"  id="checkNewPwd">
+                      <br/>
+                      <button type="button" class="btn btn-danger" style="float:right" onclick="updateUserPassword()">确定修改</button>
+                      <br/> <br/> 
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div><!--修改密码模态框结束 -->
+
+<!-- 文章转移模态框（Modal） -->
+<div class="modal fade" id="tran-model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 320px;">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                                                要转到到的目标
+                </h4>
+            </div>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 add-user ">
+                      <br/>
+                      <p>目标栏目</p>
+                <select class="form-control" style="width:280px;display: inline;" id="categoryIdList">
+                </select>
+                      <br/>
+                      <br/>
+                      <button type="button" class="btn btn-danger" style="float:right" onclick="confirmTran()">确定转移</button>
+                      <br/> <br/> 
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div><!--文章转移模态框结束 -->
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="active"><a href="#" onclick="toNews()">信息管理 <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#" onclick="toCategory()">栏目管理</a></li>
+                    <li><a href="#" onclick="toUser()">用户管理</a></li>
+                    <li><a href="#" onclick="loginout()">退出登陆</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <input type="button" onclick="toNewsWrite()" value="发布信息 " class="btn btn-primary" style="float:right">
+            <input type="button" onclick="loadCategoryAllInfo()"  data-toggle="modal" data-target="#tran-model" value="开始转移 " class="btn btn-success" style="float:left">
+            <br/>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>选择</th>
+                  <th>标题</th>
+                  <th>所属栏目</th>
+                  <th>发布时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="newsList">
+                
+              </tbody>
+            </table>
+
+             <ul class="pager" id="pageul">
+           </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../js/jquery-2.1.4.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+
+</body>
+</html>
+<script>
+
+//当前用户管理的栏目Id
+var userManegeCategory ="";
+var userType = "";
+var count = "";
+var pageCount = "";
+var page = 1;
+var size = 8;
+
+loadUserInfo();
+loadCountInfo();
+loadNewsInfo(userManegeCategory);
+//获取页数信息
+function loadCountInfo(){
+    var cId = getUrlParam("cId");
+    if(userType == 2){
+        $.ajax({
+            url:"../api/news/count?format=json",
+            type:"GET",
+            dataType:"json",
+            async:false,
+            data:{
+                "cId":userManegeCategory,
+            },
+            success:function(result){
+                count = result.count;
+                pageCount = result.pageCount;
+            }
+       });
+    }
+    
+    if(userType == 1){
+        $.ajax({
+            url:"../api/news/count?format=json",
+            type:"GET",
+            dataType:"json",
+            async:false,
+            data:{
+            },
+            success:function(result){
+                count = result.count;
+                pageCount = result.pageCount;
+            }
+       });
+    }
+}
+//加载当前登陆的用户信息
+function loadUserInfo(){
+    var userId = getUrlParam("id");
+    $.ajax({
+        url:"../api/user?format=json",
+        type:"GET",
+        dataType:"json",
+        async:false,
+        data:{
+            "id":userId,
+        },
+        success:function(user){
+                if(user == null){
+                    alert("你还没有登陆！-.-");
+                    window.location.href="../login.html";
+                }
+                var username = user[0].userName;
+                var level = "";
+                userType = user[0].type;
+                userManegeCategory = user[0].manegeCategory;
+                
+                if(userType == 1){
+                    level = "超级管理员";
+                }
+                if(userType == 2){
+                    level = "普通管理员";
+                }
+                $("#username").html("<a href='#'>当前用户："+username+"</a>");
+                $("#usertype").html("<a href='#'>身份："+level+"</a>");
+       }
+   });  
+}
+function pageup(){
+    if(page != 1 ){
+        page = page - 1;
+    }
+    loadNewsInfo(userManegeCategory);
+}
+function pagedown(){
+    if(page != pageCount){
+          page = page  + 1;
+    }
+    loadNewsInfo(userManegeCategory);
+}
+
+// 根据用户管理的栏目来加载信息列表
+function loadNewsInfo(manageCateId){
+	$("#newsList").html("");
+    //超级管理员，加载所有
+    var start = (page-1)*size;
+    if(userType == 1){
+        $.ajax({
+            url:"../api/news?format=json",
+            type:"GET",
+            dataType:"json",
+            async:false,
+            data:{
+            	"size":size,
+                "start":start,
+            },
+            success:function(newsList){
+                 for (var index in newsList) {
+                     var newsId = newsList[index].newsId;
+                     var newsTitle = newsList[index].newsTitle;
+                     var newsTime = newsList[index].newsCreateTime.substring(0,10);
+                     var cId = newsList[index].cId;
+                     var cName = loadCategoryInfo(cId);
+                     $("#newsList").append("<tr><td><input type='checkbox' name='selectNewsId' id='selectNewsId' value='"+newsId+"'></td><td>"+newsTitle+"</td><td>"+cName+
+                             "</td><td>"+newsTime+"</td><td><a href='#' onclick=deleteNews("+newsId+")>删除</a>  <a href='#' onclick=\"toNewsUpdate(\'"+newsId+"\')\">更新</a></td></tr>");
+                 }
+                 $("#pageul").html("<a href='#' onclick='pageup()'><button type='button' class='btn btn-default'>上一页</button></a>"+page+"/"+pageCount+"<a href='#' onclick='pagedown()'><button type='button' class='btn btn-default '> 下一页</button></a>");
+               }
+            });  
+        return ;
+    }
+    
+    if(manageCateId == ""){
+        $("#newsList").html("你还没有可以管理的栏目！");
+        return ;
+    }
+    var cName ="";
+    var cId = "";
+    $.ajax({
+        url:"../api/category?format=json",
+        type:"GET",
+        dataType:"json",
+        async:false,
+        data:{
+            "id":manageCateId,
+        },
+        success:function(categorys){
+            cId = categorys[0].cId;
+            cName = categorys[0].cName;
+        }
+    });  
+        
+    $.ajax({
+        url:"../api/news?format=json",
+        type:"GET",
+        dataType:"json",
+        async:false,
+        data:{
+            "cId":cId,
+            "size":size,
+            "start":start,
+        },
+        success:function(newsList){
+             for (var index in newsList) {
+                 var newsId = newsList[index].newsId;
+                 var newsTitle = newsList[index].newsTitle;
+                 var newsTime = newsList[index].newsCreateTime.substring(0,10);
+                 $("#newsList").append("<tr><td>"+newsId+"</td><td>"+newsTitle+"</td><td>"+cName+
+                         "</td><td>"+newsTime+"</td><td><a href='#' onclick=deleteNews("+newsId+")>删除</a>  <a href='#' onclick=\"toNewsUpdate(\'"+newsId+"\')\">更新</a></td></tr>");
+             }
+             $("#pageul").html("<a href='#' onclick='pageup()'><button type='button' class='btn btn-default'>上一页</button></a>"+page+"/"+pageCount+"<a href='#' onclick='pagedown()'><button type='button' class='btn btn-default '> 下一页</button></a>");
+             
+           }
+        });  
+}
+//根据CID查询栏目名称
+function loadCategoryInfo(cId){
+    var cName = "";
+    $.ajax({
+        url:"../api/category?format=json",
+        type:"GET",
+        dataType:"json",
+        async:false,
+        data:{
+            "id":cId,
+        },
+        success:function(categorys){
+            cName = categorys[0].cName;
+        }
+    }); 
+    return cName;
+}
+//获取url参数
+function getUrlParam(name){
+      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);
+      if(r!=null)return  unescape(r[2]); return null;
+}
+
+//退出登陆
+function loginout(){
+     $.ajax({
+        url:"../api/loginout?format=json",
+        type:"GET",
+        dataType:"json",
+        data:{},
+        success:function(result){
+           alert("你已成功注销登陆！");
+           window.location.href="../login.html";
+        }
+     });  
+}
+
+function deleteNews(newsId){
+    var msg = "你确定要删除这篇文章吗？";
+    if (confirm(msg)==false){
+           return ;
+    }
+    $.ajax({
+        url:"../api/news?format=json",
+        type:"DELETE",
+        dataType:"json",
+        data:{
+            "id":newsId,
+        },
+        success:function(result){
+            if(result+"" == "false"){
+                alert("你没有权限删除这篇文章！");
+                return ;
+            }
+            if(result+"" == "true"){
+                alert("文章已删除");
+                location.reload([true]);
+            }
+            
+        }
+     });  
+}
+
+//修改密码
+function updateUserPassword(){
+    var oldPassword = $("#oldPassword").val();
+    var newPassword = $("#newPassword").val();
+    var checkNewPwd = $("#checkNewPwd").val();
+    if($.trim(oldPassword).length < 1 || 
+            $.trim(newPassword).length < 1 || 
+            $.trim(checkNewPwd).length < 1 ){
+        alert("信息填写不完整！");
+        return ;
+    }
+    if(newPassword != checkNewPwd){
+        alert("两次密码输入不一致！");
+        return ;
+    }
+    $.ajax({
+        url:"../api/user?format=json",
+        type:"PUT",
+        dataType:"json",
+        data:{
+            "oldPassword":oldPassword,            
+            "newPassword":newPassword,
+        },
+        success:function(data){
+            if(data == null){
+                alert("你的操作超出了你的权限范围！");
+                return ;
+            }
+            var tip = data.result;
+            if(tip == "true"){
+                alert("密码已更新！");
+                location.reload([true]);
+                return ;
+            }
+            alert(tip);
+        }
+     }); 
+}
+function loadCategoryAllInfo(){
+    if(userType ==1 ){
+        $.ajax({
+             url:"../api/category?format=json",
+             type:"GET",
+             dataType:"json",
+             data:{
+             },
+             success:function(category){
+                  for (var index in category) {
+                      var name = category[index].cName;
+                      var cId = category[index].cId;
+                      $("#categoryIdList").append("<option value='"+cId+"'>"+name+"</option>");
+                  }
+             }
+        });
+    }
+}
+//批量转移
+function confirmTran(){
+	if(userType ==2 ){
+		alert("你的操作超出了你的权限");
+		return ;
+	}
+	var cId = $("#categoryIdList").val();
+	var obj = document.getElementsByName("selectNewsId");
+	var  selectNewsId = [];
+	for(k in obj){
+	    if(obj[k].checked){
+	    	selectNewsId.push(obj[k].value);
+	    }
+	}
+	   $.ajax({
+	        url:"../api/news?format=json",
+	        type:"PUT",
+	        dataType:"json",
+	        data:{
+	            "selectNewsId":selectNewsId+"",
+	            "cId":cId,
+	        },
+	        success:function(data){
+	            if(data == null){
+	                alert("你的操作超出了你的权限范围！");
+	                return ;
+	            }
+	            var tip = data.result;
+	            if(tip == "true"){
+	                alert("批量转移已经完成！");
+	                toNews();
+	                return ;
+	            }
+	            alert(tip);
+	        }
+	     });  
+}
+
+
+//跳转到文章发布页面
+function toNewsWrite(){
+    var userId = getUrlParam("id");
+    window.location.href="newswrite.html?id="+userId;
+}
+//跳转到文章更新页面
+function toNewsUpdate(newsId){
+    var userId = getUrlParam("id");
+    window.location.href="newsupdate.html?id="+userId+"&newsId="+newsId;
+}
+//跳转到栏目管理页面
+function toCategory(){
+    var userId = getUrlParam("id");
+    window.location.href="category.html?id="+userId;
+}
+//跳转到用户管理页面
+function toUser(){
+    var userId = getUrlParam("id");
+    window.location.href="user.html?id="+userId;
+}
+//跳转到信息管理页面
+function toNews(){
+    var userId = getUrlParam("id");
+    window.location.href="index.html?id="+userId;
+}
+</script>

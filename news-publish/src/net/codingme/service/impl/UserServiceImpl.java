@@ -210,8 +210,6 @@ public class UserServiceImpl implements UserService {
 		String userEmail = request.getParameter("email");
 		String password = request.getParameter("password");
 		String sql = "SELECT * FROM USER WHERE USER_EMAIL = ? AND PASSWORD = ? ";
-		System.out.println(userEmail);
-		System.out.println(StringUtil.getMd5(password));
 		List<User> users = userDao.select(sql,userEmail,StringUtil.getMd5(password) );
 		if(users!=null && users.size() >0){
 			User user = users.get(0);
@@ -223,23 +221,6 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 	
-	/**
-	 * 检查权限 普通用户不能进行news的非自我管理的POST,PUT,DELET操作
-	 * @param request
-	 * @param newsId
-	 * @return
-	 */
-	public boolean checkAuthority(HttpServletRequest request ,String userId){
-		User user = (User) request.getSession().getAttribute("user");
-		if(user.getType() == 1){
-			return true;
-		}
-		if(user.getType() == 2){
-			if( user.getUserId().toString().equals(userId)){
-				return true;
-			}
-		}
-		return false;
-	}
+
 	
 }

@@ -45,7 +45,6 @@ public class NewsDaoImpl implements NewsDao{
 	}
 	
 	/**
-	 * 通用查询
 	 * 
 	 * @param sql SQL语句，自定义的值用问号表示
 	 * @param args  参数列表，对应sql中问号顺序

@@ -40,10 +40,10 @@ public class RESTFulNews extends HttpServlet {
 			String cId = request.getParameter("cId");
 			int count = newsService.selectCount(cId);
 			int pageCount=0;
-			if(count%5 == 0){
-				pageCount = count /5;
+			if(count%8 == 0){
+				pageCount = count /8;
 			}else{
-				pageCount = count /5 + 1;
+				pageCount = count /8 + 1;
 			}
 			String json = "{\"count\":\""+count+"\",\"pageCount\":\""+pageCount+"\"}";
 			out.print(json);

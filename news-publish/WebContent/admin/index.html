@@ -92,6 +92,7 @@
 			</div>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 			<input type="button" onclick="toNewsWrite()" value="发布信息 " class="btn btn-primary" style="float:right">
+			<input type="button" onclick="toNewsTran()" value="批量转移" class="btn btn-info" style="float:right;margin: 0 10px;">
 			<br/>
             <table class="table table-striped">
               <thead>
@@ -109,6 +110,9 @@
             </table>
 
 
+            <ul class="pager" id="pageul">
+           </ul>
+
 			</div>
 		</div>
 	</div>
@@ -124,9 +128,48 @@
 //当前用户管理的栏目Id
 var userManegeCategory ="";
 var userType = "";
-loadUserInfo();
-loadNewsInfo(userManegeCategory);
+var count = "";
+var pageCount = "";
+var page = 1;
+var size = 8;
 
+loadUserInfo();
+loadCountInfo();
+loadNewsInfo(userManegeCategory);
+//获取页数信息
+function loadCountInfo(){
+    var cId = getUrlParam("cId");
+    if(userType == 2){
+	    $.ajax({
+	        url:"../api/news/count?format=json",
+	        type:"GET",
+	        dataType:"json",
+	        async:false,
+	        data:{
+	            "cId":userManegeCategory,
+	        },
+	        success:function(result){
+	            count = result.count;
+	            pageCount = result.pageCount;
+	        }
+	   });
+    }
+    
+    if(userType == 1){
+        $.ajax({
+            url:"../api/news/count?format=json",
+            type:"GET",
+            dataType:"json",
+            async:false,
+            data:{
+            },
+            success:function(result){
+                count = result.count;
+                pageCount = result.pageCount;
+            }
+       });
+    }
+}
 //加载当前登陆的用户信息
 function loadUserInfo(){
     var userId = getUrlParam("id");
@@ -159,10 +202,23 @@ function loadUserInfo(){
        }
    });	
 }
-
+function pageup(){
+    if(page != 1 ){
+        page = page - 1;
+    }
+    loadNewsInfo(userManegeCategory);
+}
+function pagedown(){
+    if(page != pageCount){
+          page = page  + 1;
+    }
+    loadNewsInfo(userManegeCategory);
+}
 // 根据用户管理的栏目来加载信息列表
 function loadNewsInfo(manageCateId){
+	$("#newsList").html("");
 	//超级管理员，加载所有
+	var start = (page-1)*size;
 	if(userType == 1){
 	    $.ajax({
 	        url:"../api/news?format=json",
@@ -170,6 +226,8 @@ function loadNewsInfo(manageCateId){
 	        dataType:"json",
 	        async:false,
 	        data:{
+	            "size":size,
+	            "start":start,
 	        },
 	        success:function(newsList){
 	             for (var index in newsList) {
@@ -181,6 +239,7 @@ function loadNewsInfo(manageCateId){
 	                 $("#newsList").append("<tr><td>"+newsId+"</td><td>"+newsTitle+"</td><td>"+cName+
 	                         "</td><td>"+newsTime+"</td><td><a href='#' onclick=deleteNews("+newsId+")>删除</a>  <a href='#' onclick=\"toNewsUpdate(\'"+newsId+"\')\">更新</a></td></tr>");
 	             }
+	             $("#pageul").html("<a href='#' onclick='pageup()'><button type='button' class='btn btn-default'>上一页</button></a>"+page+"/"+pageCount+"<a href='#' onclick='pagedown()'><button type='button' class='btn btn-default '> 下一页</button></a>");
 	           }
 	        });  
 	    return ;
@@ -213,6 +272,8 @@ function loadNewsInfo(manageCateId){
         async:false,
         data:{
             "cId":cId,
+            "size":size,
+            "start":start,
         },
         success:function(newsList){
         	 for (var index in newsList) {
@@ -222,6 +283,7 @@ function loadNewsInfo(manageCateId){
 	             $("#newsList").append("<tr><td>"+newsId+"</td><td>"+newsTitle+"</td><td>"+cName+
                          "</td><td>"+newsTime+"</td><td><a href='#' onclick=deleteNews("+newsId+")>删除</a>  <a href='#' onclick=\"toNewsUpdate(\'"+newsId+"\')\">更新</a></td></tr>");
         	 }
+        	 $("#pageul").html("<a href='#' onclick='pageup()'><button type='button' class='btn btn-default'>上一页</button></a>"+page+"/"+pageCount+"<a href='#' onclick='pagedown()'><button type='button' class='btn btn-default '> 下一页</button></a>");
            }
 	    });  
 }
@@ -339,11 +401,19 @@ function toNewsUpdate(newsId){
 }
 //跳转到栏目管理页面
 function toCategory(){
+    if(userType ==2 ){
+        alert("你的操作超出了你的权限");
+        return ;
+    }
     var userId = getUrlParam("id");
     window.location.href="category.html?id="+userId;
 }
 //跳转到用户管理页面
 function toUser(){
+    if(userType ==2 ){
+        alert("你的操作超出了你的权限");
+        return ;
+    }
     var userId = getUrlParam("id");
     window.location.href="user.html?id="+userId;
 }
@@ -351,5 +421,14 @@ function toUser(){
 function toNews(){
 	var userId = getUrlParam("id");
 	window.location.href="index.html?id="+userId;
+}
+//跳转到批量转移
+function toNewsTran(){
+    if(userType ==2 ){
+	    alert("你的操作超出了你的权限");
+	    return ;
+	}
+    var userId = getUrlParam("id");
+    window.location.href="newstransfer.html?id="+userId;
 }
 </script>

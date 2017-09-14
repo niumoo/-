@@ -80,6 +80,21 @@ public class NewsServiceImpl implements NewsService {
 	@Override
 	public String update(HttpServletRequest request) {
 		Map<String, String> urlToMap = ServletUtil.urlToMap(request);
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		//批量转移
+		if(urlToMap.get("selectNewsId") != null){
+			if(user.getType() != 1){
+				return "你的操作超出了你的权限";
+			}
+			String[] selectNewsId = urlToMap.get("selectNewsId").split(",");
+			String cId = urlToMap.get("cId");
+			for (String newsId : selectNewsId) {
+				String sql = "UPDATE NEWS SET C_ID = ? WHERE NEWS_ID = ?";
+				newsDao.update(sql, cId,newsId);
+			};
+			return "true";
+		}
 		// 获取参数
 		String newsId = urlToMap.get("newsId").trim();
 		String title = urlToMap.get("title").trim();
@@ -99,8 +114,6 @@ public class NewsServiceImpl implements NewsService {
 		}
 
 		// 检查权限
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("user");
 		if (user.getType() == 2 && !cId.equals(user.getManegeCategory())) {
 			return "你的操作超出了你的权限！";
 		}
@@ -136,13 +149,21 @@ public class NewsServiceImpl implements NewsService {
 		String size = request.getParameter("size");
 		
 		// 通过专栏ID进行分页查询信息
-		if(start !=null && size != null && cId != null){
-			if(!StringUtil.isNumeric(cId) || !StringUtil.isNumeric(start) 
-				|| !StringUtil.isNumeric(size)){
+		if(start !=null && size != null){
+			if(!StringUtil.isNumeric(start) || !StringUtil.isNumeric(size)){
 				return null;
 			}
-			String sql = "SELECT * FROM NEWS WHERE C_ID = ? ORDER BY NEWS_CREATE_TIME DESC LIMIT "+start+" , "+size;
-			return newsDao.select(sql, cId);
+			//专栏分页查询
+			if( cId != null){
+				String sql = "SELECT * FROM NEWS WHERE C_ID = ? ORDER BY NEWS_CREATE_TIME DESC LIMIT "+start+" , "+size;
+				return newsDao.select(sql, cId);
+			}
+			//全部分页查询
+			if( cId == null){
+				String sql = "SELECT * FROM NEWS ORDER BY NEWS_CREATE_TIME DESC LIMIT "+start+" , "+size;
+				return newsDao.select(sql, null);
+			}
+			
 		}
 		
 		// 通过专栏ID查询所有信息
@@ -195,9 +216,15 @@ public class NewsServiceImpl implements NewsService {
 	 */
 	@Override
 	public int selectCount(String cId) {
+		if(cId != null){
+			String sql = "SELECT COUNT(*) AS NEWS_ID,NEWS_TITLE,NEWS_CONTENT,NEWS_CREATE_TIME,"
+					+ "NEWS_FILE1,NEWS_FILE2,NEWS_FILE3,C_ID FROM NEWS WHERE C_ID = ? ";
+			List<News> likeSelect = newsDao.select(sql,cId);
+			return likeSelect.get(0).getNewsId();
+		}
 		String sql = "SELECT COUNT(*) AS NEWS_ID,NEWS_TITLE,NEWS_CONTENT,NEWS_CREATE_TIME,"
-				+ "NEWS_FILE1,NEWS_FILE2,NEWS_FILE3,C_ID FROM NEWS WHERE C_ID = ? ";
-		List<News> likeSelect = newsDao.select(sql,cId);
+				+ "NEWS_FILE1,NEWS_FILE2,NEWS_FILE3,C_ID FROM NEWS";
+		List<News> likeSelect = newsDao.select(sql,null);
 		return likeSelect.get(0).getNewsId();
 	}
 	
